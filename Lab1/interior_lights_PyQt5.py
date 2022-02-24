@@ -5,7 +5,6 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap
 
 flag_sweep_thread = False
-count = 0
 flag_locked = True
 warning_lights_flag = False
 right_signal_flag = False
@@ -20,13 +19,15 @@ class MyThreadSweep(QThread):
 
     def run(self):
         global flag_sweep_thread
-        global count
+        count = 0
 
         while flag_sweep_thread:
             self.sweep_leds_signal.emit(count)
             count += 1
             time.sleep(1)
-            count = count % 4
+            if count == 4:
+                self.sweep_leds_signal.emit(-1)
+                flag_sweep_thread = False
 
 
 # ############################## EXERCISE 6 #################################
@@ -360,12 +361,22 @@ class UIMainWindow(object):
     # ############################## EXERCISE 1 ###############################
     # Clear all leds and widgtets when the Close all leds is pressed
     def close_all_leds(self):
+        global flag_sweep_thread, warning_lights_flag, left_signal_flag, right_signal_flag
         self.interior_light_led('#FFFFFF')
         self.set4leds('#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF')
         self.set_car_light('#FFFFFF')
-        global flag_sweep_thread
-        if flag_sweep_thread:
-            flag_sweep_thread = not flag_sweep_thread
+        self.progress_bar.setValue(0)
+        self.left_door_slider.setValue(0)
+        self.right_door_slider.setValue(0)
+        flag_sweep_thread = False
+        warning_lights_flag = False
+        left_signal_flag = False
+        right_signal_flag = False
+        self.set_bg_colors('#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF')
+        self.prev_kl.setDisabled(True)
+        self.prev_kl_label.setText('')
+        self.current_kl_label.setText('Current KL: no_KL')
+        self.next_kl_label.setText('KL_s')
 
     # Open one led when interior lights is pressed  
     def interior_light_led(self, b1):
@@ -394,7 +405,9 @@ class UIMainWindow(object):
     # Sweep Leds function
     def sweep_leds(self, val):
         colors = ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF']
-        colors[val] = '#FFF150'
+        global flag_sweep_thread
+        if flag_sweep_thread:
+            colors[val] = '#FFF150'
         self.set4leds(colors[0], colors[1], colors[2], colors[3])
 
     # Sweep Leds
