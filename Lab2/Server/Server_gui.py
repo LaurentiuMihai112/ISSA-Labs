@@ -110,6 +110,7 @@ class Ui_MainWindow(object):
         self.connection, _ = self.server.accept()
         global private_key, public_key
         public_key, private_key = rsa_library.generate_keypair(rsa_library.prime_number_1, rsa_library.prime_number_2)
+        # cPickle.dumps((public_key, private_key))
         self.connection.send(str(public_key[0]).encode())
         self.connection.send(str(public_key[1]).encode())
         self.connection.send(str(private_key[0]).encode())
@@ -137,15 +138,24 @@ class Ui_MainWindow(object):
         self.c_thread.start()
 
     def recv_messages_handler(self, stop_event):
+        global flag, flag_low
+        print(f"print: {stop_event}")
         while True:
             message = self.connection.recv(1024).decode()
             message = rsa_library.decrypt(private_key, message)
             print(f"Message received: {message}")
-            if not rsa_library.low_check(message):
-                self.connection.send("1".encode())
-            if not rsa_library.number_check(message):
-                self.connection.send("2".encode())
-            self.connection.send("0".encode())
+            if rsa_library.low_check(message):
+                self.connection.send(rsa_library.encrypt(public_key, "1").encode())
+                flag_low = True
+                flag = False
+            elif rsa_library.number_check(message):
+                self.connection.send(rsa_library.encrypt(public_key, "2").encode())
+                flag_low = False
+                flag = False
+            else:
+                self.connection.send(rsa_library.encrypt(public_key, "0").encode())
+                flag = True
+                flag_low = True
 
     # #############################################################
     def images(self):
