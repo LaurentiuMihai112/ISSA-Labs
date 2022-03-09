@@ -108,9 +108,12 @@ def decrypt(private_key, encrypted_msg):
 
 # ############################## EXERCISE 3 ###############################
 def low_check(hex_nr):
-    return int(hex_nr) & int(ON_low, 16) == 0
+    return not str(hex(int(hex_nr))).endswith("01")
 
 
 # ############################## EXERCISE 4 ###############################
 def number_check(hex_nr):
-    return (int(hex_nr) & (1 << 15)) == 0
+    status = hex(int('0x' + str(hex(int(hex_nr)))[-2:], 16) + int(hex(int(hex_nr))[:4], 16))
+    if status == '0xff':
+        return False
+    return True
