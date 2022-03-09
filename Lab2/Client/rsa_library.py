@@ -113,5 +113,7 @@ def low_check(hex_nr):
 
 # ############################## EXERCISE 4 ###############################
 def number_check(hex_nr):
-    print("ceva " + hex(~int('0x01', 16)))
-    return not str(hex(int(hex_nr))).startswith("0xfe")
+    status = hex(int('0x' + str(hex(int(hex_nr)))[-2:], 16) + int(hex(int(hex_nr))[:4], 16))
+    if status == '0xff':
+        return False
+    return True

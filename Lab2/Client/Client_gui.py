@@ -1,11 +1,12 @@
+import _pickle
+import os
+import socket
+import threading
+
 import psutil as psutil
 from PyQt5 import QtCore, QtGui, QtWidgets
-import socket
+
 import rsa_library
-import _pickle as cPickle
-import os
-import threading
-import sys, time
 
 HOST = 'localhost'
 PORT = 12344
@@ -107,9 +108,9 @@ class Ui_MainWindow(object):
         self.corrupted_low.setEnabled(False)
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((HOST, PORT))
+        self.connected_label.setText('Connected!')
         global public_key, private_key
-        public_key = int(self.client.recv(1024).decode()), int(self.client.recv(1024).decode())
-        private_key = int(self.client.recv(1024).decode()), int(self.client.recv(1024).decode())
+        public_key, private_key = _pickle.loads(self.client.recv(1024))
         print(f"received data {public_key},{private_key}")
         self.recv_messages()
 

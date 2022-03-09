@@ -1,11 +1,12 @@
+import _pickle
+import os
+import socket
+import threading
+
 import psutil
 from PyQt5 import QtCore, QtGui, QtWidgets
-import socket
+
 import rsa_library
-import _pickle as cPickle
-import os
-import threading
-import sys, time
 
 HOST = 'localhost'
 PORT = 12344
@@ -108,13 +109,11 @@ class Ui_MainWindow(object):
         self.server.bind((HOST, PORT))
         self.server.listen(1)
         self.connection, _ = self.server.accept()
-        global private_key, public_key
+        self.server_label.clear()
+        self.server_label.setText('Connected!')
         public_key, private_key = rsa_library.generate_keypair(rsa_library.prime_number_1, rsa_library.prime_number_2)
-        # cPickle.dumps((public_key, private_key))
-        self.connection.send(str(public_key[0]).encode())
-        self.connection.send(str(public_key[1]).encode())
-        self.connection.send(str(private_key[0]).encode())
-        self.connection.send(str(private_key[1]).encode())
+        key_bytes = _pickle.dumps((public_key, private_key))
+        self.connection.send(key_bytes)
         print(f"sent data {public_key},{private_key}")
         self.recv_messages()
 
@@ -139,7 +138,6 @@ class Ui_MainWindow(object):
 
     def recv_messages_handler(self, stop_event):
         global flag, flag_low
-        print(f"print: {stop_event}")
         while True:
             message = self.connection.recv(1024).decode()
             message = rsa_library.decrypt(private_key, message)
