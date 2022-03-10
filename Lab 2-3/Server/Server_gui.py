@@ -110,6 +110,7 @@ class Ui_MainWindow(object):
         self.server.listen(1)
         self.connection, _ = self.server.accept()
         self.server_label.clear()
+        self.server_label.setStyleSheet("font: bold; color: green")
         self.server_label.setText('Connected!')
         public_key, private_key = rsa_library.generate_keypair(rsa_library.prime_number_1, rsa_library.prime_number_2)
         key_bytes = _pickle.dumps((public_key, private_key))
@@ -142,11 +143,11 @@ class Ui_MainWindow(object):
             message = self.connection.recv(1024).decode()
             message = rsa_library.decrypt(private_key, message)
             print(f"Message received: {message}")
-            if rsa_library.low_check(message):
+            if not rsa_library.low_check(hex(int(message))):
                 self.connection.send(rsa_library.encrypt(public_key, "1").encode())
                 flag_low = True
                 flag = False
-            elif rsa_library.number_check(message):
+            elif not rsa_library.number_check(hex(int(message))):
                 self.connection.send(rsa_library.encrypt(public_key, "2").encode())
                 flag_low = False
                 flag = False

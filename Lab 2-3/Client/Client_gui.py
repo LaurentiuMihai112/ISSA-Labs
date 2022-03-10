@@ -108,6 +108,7 @@ class Ui_MainWindow(object):
         self.corrupted_low.setEnabled(False)
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((HOST, PORT))
+        self.connected_label.setStyleSheet("font: bold; color: green")
         self.connected_label.setText('Connected!')
         global public_key, private_key
         public_key, private_key = _pickle.loads(self.client.recv(1024))
