@@ -112,7 +112,7 @@ def low_check(hex_nr):
     :param hex_nr: hex value as string in decimal
     :return: True if the low check succeeds, False otherwise
     """
-    return str(hex(int(hex_nr)))[-2:] == ON_low[2:]
+    return hex_nr[-2:] == ON_low[2:]
 
 
 # ############################## EXERCISE 4 ###############################
@@ -121,7 +121,7 @@ def number_check(hex_nr):
     :param hex_nr: hex value as string in decimal
     :return: True if the number check succeeds, False otherwise
     """
-    status = hex(int('0x' + str(hex(int(hex_nr)))[-2:], 16) + int(hex(int(hex_nr))[:4], 16))
+    status = hex(int('0x' + hex_nr[-2:], 16) + int(hex_nr[:4], 16))
     if status == '0xff':
         return True and low_check(hex_nr)
     return False
