@@ -293,10 +293,11 @@ class UiMainWindow(object):
 
     # SET LED0
     def set_led0_label(self, data_recv):
+        self.led0_state.setVisible(True)
         if data_recv:
-            self.led0_state.setStyleSheet('background-color:green;')
+            self.led0_state.setStyleSheet('background-color:green; border-radius: 12px;')
         else:
-            self.led0_state.setStyleSheet('background-color:red;')
+            self.led0_state.setStyleSheet('background-color:red; border-radius: 12px;')
 
     def set_led0_flags(self):
         global led0_flag
