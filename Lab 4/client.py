@@ -210,6 +210,7 @@ class UiMainWindow(object):
         global DIAG
         while True:
             message = self.connection.recv(1024).decode()
+            print(f"Message received:{message}")
             if DIAG:
                 if message == 'Ox3E00':
                     DIAG = False
@@ -224,6 +225,18 @@ class UiMainWindow(object):
                         self.set_led2_label(data)
                     if led_number == 3:
                         self.set_led3_label(data)
+                if message.startswith('0x62'):
+                    dtc_number = int(message[5])
+                    data = message[-5:]
+                    print(data)
+                    if dtc_number == 1:
+                        self.set_dtc1_state(data)
+                    if dtc_number == 2:
+                        self.set_dtc2_state(data)
+                    if dtc_number == 3:
+                        self.set_dtc3_state(data)
+                    if dtc_number == 4:
+                        self.set_dtc4_state(data)
 
             elif message == 'Ox3E01':
                 DIAG = True
@@ -250,11 +263,19 @@ class UiMainWindow(object):
     # ############################## EXERCISE 3 ###############################
     # READ DTC's
     def get_dtc_state(self, dtc_string):
-        pass
+        self.connection.send('0x2201'.encode())
 
     # SET DTC1 State
     def set_dtc1_state(self, data_recv):
-        pass
+        if data_recv == '02550':
+            self.dtc1_state.setStyleSheet('font:bold; color: green;')
+            self.dtc1_state.setText("Active")
+        elif data_recv == '25500':
+            self.dtc1_state.setStyleSheet('font:bold; color: red;')
+            self.dtc1_state.setText("Inactive")
+        else:
+            self.dtc1_state.setStyleSheet('font:bold; color: blue;')
+            self.dtc1_state.setText("Unknown")
 
     # SET DTC2 State
     def set_dtc2_state(self, data_recv):
