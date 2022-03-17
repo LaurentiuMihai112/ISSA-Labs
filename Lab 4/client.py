@@ -219,23 +219,24 @@ class UiMainWindow(object):
                     data = int(message[-1])
                     if led_number == 0:
                         self.set_led0_label(data)
-                    if led_number == 1:
+                    elif led_number == 1:
                         self.set_led1_label(data)
-                    if led_number == 2:
+                    elif led_number == 2:
                         self.set_led2_label(data)
-                    if led_number == 3:
+                    elif led_number == 3:
                         self.set_led3_label(data)
                 if message.startswith('0x62'):
                     dtc_number = int(message[5])
                     data = message[-5:]
-                    print(data)
+                    print(f"dtc_number is {dtc_number}")
+                    print(f"data is {data}")
                     if dtc_number == 1:
                         self.set_dtc1_state(data)
-                    if dtc_number == 2:
+                    elif dtc_number == 2:
                         self.set_dtc2_state(data)
-                    if dtc_number == 3:
+                    elif dtc_number == 3:
                         self.set_dtc3_state(data)
-                    if dtc_number == 4:
+                    elif dtc_number == 4:
                         self.set_dtc4_state(data)
 
             elif message == 'Ox3E01':
@@ -263,10 +264,12 @@ class UiMainWindow(object):
     # ############################## EXERCISE 3 ###############################
     # READ DTC's
     def get_dtc_state(self, dtc_string):
-        self.connection.send('0x2201'.encode())
+        self.connection.send(('0x22' + dtc_string).encode())
 
     # SET DTC1 State
     def set_dtc1_state(self, data_recv):
+        self.dtc1_state.setStyleSheet('')
+        self.dtc1_state.clear()
         if data_recv == '02550':
             self.dtc1_state.setStyleSheet('font:bold; color: green;')
             self.dtc1_state.setText("Active")
@@ -279,15 +282,45 @@ class UiMainWindow(object):
 
     # SET DTC2 State
     def set_dtc2_state(self, data_recv):
-        pass
+        self.dtc2_state.setStyleSheet('')
+        self.dtc2_state.clear()
+        if data_recv == '02550':
+            self.dtc2_state.setStyleSheet('font:bold; color: green;')
+            self.dtc2_state.setText("Active")
+        elif data_recv == '25500':
+            self.dtc2_state.setStyleSheet('font:bold; color: red;')
+            self.dtc2_state.setText("Inactive")
+        else:
+            self.dtc2_state.setStyleSheet('font:bold; color: blue;')
+            self.dtc2_state.setText("Unknown")
 
     # SET DTC3 State
     def set_dtc3_state(self, data_recv):
-        pass
+        self.dtc3_state.setStyleSheet('')
+        self.dtc3_state.clear()
+        if data_recv == '02550':
+            self.dtc3_state.setStyleSheet('font:bold; color: green;')
+            self.dtc3_state.setText("Active")
+        elif data_recv == '25500':
+            self.dtc3_state.setStyleSheet('font:bold; color: red;')
+            self.dtc3_state.setText("Inactive")
+        else:
+            self.dtc3_state.setStyleSheet('font:bold; color: blue;')
+            self.dtc3_state.setText("Unknown")
 
     # SET DTC4 State
     def set_dtc4_state(self, data_recv):
-        pass
+        self.dtc4_state.setStyleSheet('')
+        self.dtc4_state.clear()
+        if data_recv == '02550':
+            self.dtc4_state.setStyleSheet('font:bold; color: green;')
+            self.dtc4_state.setText("Active")
+        elif data_recv == '25500':
+            self.dtc4_state.setStyleSheet('font:bold; color: red;')
+            self.dtc4_state.setText("Inactive")
+        else:
+            self.dtc4_state.setStyleSheet('font:bold; color: blue;')
+            self.dtc4_state.setText("Unknown")
 
     # ############################## EXERCISE 4 ###############################
 
@@ -311,10 +344,11 @@ class UiMainWindow(object):
 
     # SET LED1
     def set_led1_label(self, data_recv):
+        self.led1_state.setVisible(True)
         if data_recv:
-            self.led1_state.setStyleSheet('background-color:green;')
+            self.led1_state.setStyleSheet('background-color:green; border-radius: 12px;')
         else:
-            self.led1_state.setStyleSheet('background-color:red;')
+            self.led1_state.setStyleSheet('background-color:red; border-radius: 12px;')
 
     def set_led1_flags(self):
         global led1_flag
@@ -328,10 +362,11 @@ class UiMainWindow(object):
 
     # SET LED2
     def set_led2_label(self, data_recv):
+        self.led2_state.setVisible(True)
         if data_recv:
-            self.led2_state.setStyleSheet('background-color:green;')
+            self.led2_state.setStyleSheet('background-color:green; border-radius: 12px;')
         else:
-            self.led2_state.setStyleSheet('background-color:red;')
+            self.led2_state.setStyleSheet('background-color:red; border-radius: 12px;')
 
     def set_led2_flags(self):
         global led2_flag
@@ -345,10 +380,11 @@ class UiMainWindow(object):
 
     # SET LED3
     def set_led3_label(self, data_recv):
+        self.led3_state.setVisible(True)
         if data_recv:
-            self.led3_state.setStyleSheet('background-color:green;')
+            self.led3_state.setStyleSheet('background-color:green; border-radius: 12px;')
         else:
-            self.led3_state.setStyleSheet('background-color:red;')
+            self.led3_state.setStyleSheet('background-color:red; border-radius: 12px;')
 
     def set_led3_flags(self):
         global led3_flag
