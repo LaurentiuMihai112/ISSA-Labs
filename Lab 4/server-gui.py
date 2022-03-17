@@ -142,20 +142,19 @@ class UiMainwindow(object):
                 DIAG = False
             elif DIAG:
                 if message.startswith('0x22'):
-                    dtc_number = int(message[-1:])
-                    color = '00000'
+                    dtc_number = int(message[-1])
+                    color = message[-2:]
                     if dtc_number == 1:
-                        print('here')
-                        color = '01' + self.read_dtc1(1)
+                        color += self.read_dtc1(1)
                     if dtc_number == 2:
-                        color = self.read_dtc1()
+                        color += self.read_dtc2(1)
                     if dtc_number == 3:
-                        color = self.read_dtc1()
+                        color += self.read_dtc3(1)
                     if dtc_number == 4:
-                        color = self.read_dtc1()
+                        color += self.read_dtc4(1)
                     self.connection.send(('0x62' + color).encode())
                 if message.startswith('0x2E'):
-                    self.connection.send(('0x6E'+message[4:]).encode())
+                    self.connection.send(('0x6E' + message[4:]).encode())
 
     def recv(self):
         self.stop_event = threading.Event()
@@ -172,21 +171,21 @@ class UiMainwindow(object):
 
     # DTC2
     def set_dtc2(self, led, bright):
-        if 'green' not in self.led1_state.styleSheet():
+        if 'green' not in self.led2_state.styleSheet():
             self.led2_state.setStyleSheet("background-color:green;border-radius: 20px;")
         else:
             self.led2_state.setStyleSheet("background-color:red;border-radius: 20px;")
 
     # DTC3
     def set_dtc3(self, led, bright):
-        if 'green' not in self.led1_state.styleSheet():
+        if 'green' not in self.led3_state.styleSheet():
             self.led3_state.setStyleSheet("background-color:green;border-radius: 20px;")
         else:
             self.led3_state.setStyleSheet("background-color:red;border-radius: 20px;")
 
     # DTC4
     def set_dtc4(self, led, bright):
-        if 'green' not in self.led1_state.styleSheet():
+        if 'green' not in self.led4_state.styleSheet():
             self.led4_state.setStyleSheet("background-color:green;border-radius: 20px;")
         else:
             self.led4_state.setStyleSheet("background-color:red;border-radius: 20px;")
@@ -214,13 +213,25 @@ class UiMainwindow(object):
         return ''
 
     def read_dtc2(self, data):
-        pass
+        if 'green' in self.led2_state.styleSheet():
+            return '02550'
+        elif 'red' in self.led2_state.styleSheet():
+            return '25500'
+        return ''
 
     def read_dtc3(self, data):
-        pass
+        if 'green' in self.led3_state.styleSheet():
+            return '02550'
+        elif 'red' in self.led3_state.styleSheet():
+            return '25500'
+        return ''
 
     def read_dtc4(self, data):
-        pass
+        if 'green' in self.led4_state.styleSheet():
+            return '02550'
+        elif 'red' in self.led4_state.styleSheet():
+            return '25500'
+        return ''
 
     # ############################## EXERCISE 4 ###############################
     def set_led0(self, data):
