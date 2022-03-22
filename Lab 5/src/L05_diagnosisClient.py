@@ -124,11 +124,22 @@ class Client:
         self.parse_configuration_file()
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        # Exercise 1
+        if not 30 <= int(self.car_data['oil-pressure']) <= 60:
+            turn_oil_pressure_light(1)
+        if (not 20 <= int(self.car_data['FLtire-pressure']) <= 24) or \
+                (not 20 <= int(self.car_data['FRtire-pressure']) <= 24):
+            turn_tire_pressure_light(1)
+        if (not 18 <= int(self.car_data['RLtire-pressure']) <= 22) or \
+                (not 18 <= int(self.car_data['RRtire-pressure']) <= 22):
+            turn_tire_pressure_light(1)
+        if 90 < int(self.car_data['engine-temperature']):
+            turn_engine_temperature_light(1)
+        if int(self.car_data['battery-level']) < 15:
+            turn_battery_light(1)
 
     def parse_configuration_file(self):
         script_location = Path(__file__).absolute().parent
-        file_location = script_location / 'L04_carData.json'
+        file_location = script_location / 'L05_carData.json'
         with open(file_location, 'r') as content_file:
             content = content_file.read()
             print('content = ', content)
@@ -179,13 +190,12 @@ class Client:
     def handle_message(self, command):
         if command.startswith('display-popup'):
             print_system_notification("display-popup")
-
-            # Exercise 2
+            self.print_popup(command)
 
         if 'service-soon' in command:
             print_system_notification("service-soon")
 
-            # Exercise 3
+            turn_service_soon_light(1)
 
     def receive(self):
         status.configure(bg='green', text='Connected')

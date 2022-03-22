@@ -1,13 +1,13 @@
 { 
 "carinfo": 
 {
-"oil-pressure":60 , 
+"oil-pressure":60 ,
 "RLtire-pressure":20,
 "RRtire-pressure":20,
 "FLtire-pressure":22,
 "FRtire-pressure":22,
 "engine-temperature":90,
-"battery-level":72
+"battery-level":15
 },
 "dtc":
 [
