@@ -55,14 +55,14 @@ def buttons():
 b1, b2, b3, b4 = buttons()
 
 
-def warningLights():
-    for i in "CheckEngine", "OilPressure", "TirePressure", "EngineTmperature", "Battery", "ServiceSoon":
+def warning_lights():
+    for _ in "CheckEngine", "OilPressure", "TirePressure", "EngineTmperature", "Battery", "ServiceSoon":
         b = tk.Button(master=frame2, text="", height=4, width=8, bg='black', state="disabled")
         b.pack(side="left")
         yield b
 
 
-CheckEngineLight, OilPressureLight, TirePressureLight, EngineTemperatureLight, BatteryLight, ServiceSoonLight = warningLights()
+CheckEngineLight, OilPressureLight, TirePressureLight, EngineTemperatureLight, BatteryLight, ServiceSoonLight = warning_lights()
 
 
 def print_system_notification(message):
@@ -221,7 +221,7 @@ class Client:
             self.s.sendall(bytes(respond.encode("utf-8")))
             text.insert("insert", "({}) : sent msg ({})\n".format(now, respond))
         except BrokenPipeError:
-            text.insert("insert", "\nDate: {}\Server has been disconnected.\n".format(now))
+            text.insert("insert", "\nDate: {}\\Server has been disconnected.\n".format(now))
             self.s.close()
 
 
@@ -247,7 +247,7 @@ def destroy():
     status.configure(bg='red', text='Disconnected')
 
 
-def displayCarInfo():
+def display_car_info():
     popup = tk.Toplevel()
     popup.geometry("%dx%d%+d%+d" % (300, 200, 250, 125))
     popup.title = "Car Info"
@@ -303,7 +303,7 @@ def displayCarInfo():
     exit_button.configure(command=close_info)
 
 
-def startRemoteDiagnosis():
+def start_remote_diagnosis():
     for element in c1.dtc_list:
         c1.send_bytes_to_server("dtc-" + str(element))
 
@@ -319,7 +319,7 @@ if __name__ == "__main__":
     b2.configure(command=send)
     b3.configure(command=clear)
     b4.configure(command=destroy)
-    displayInfo.configure(command=displayCarInfo)
-    startDiagnosis.configure(command=startRemoteDiagnosis)
+    displayInfo.configure(command=display_car_info)
+    startDiagnosis.configure(command=start_remote_diagnosis)
     t0 = threading.Thread(target=root.mainloop)
     t0.run()

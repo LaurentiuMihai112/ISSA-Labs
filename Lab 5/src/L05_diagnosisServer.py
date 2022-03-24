@@ -1,13 +1,8 @@
-from datetime import datetime
-from tkinter import ttk
-import socket
-import json
 import argparse
+import socket
 import threading
-import os
-import sys
-from pathlib import Path
 import tkinter as tk
+from datetime import datetime
 
 root = tk.Tk()
 root.title("Diagnosis Server")
