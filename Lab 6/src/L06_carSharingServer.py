@@ -107,8 +107,8 @@ class Server:
         if command.startswith('start-rental'):
             print_system_notification('start-rental')
             if car_id in self.auth_clients:
-                self.send_bytes_to_client('Authorized')
                 self.rentals_in_progress.append(car_id)
+                self.send_bytes_to_client('Authorized')
             else:
                 self.send_bytes_to_client('Unauthorized')
             # Exercise 2
@@ -123,8 +123,8 @@ class Server:
         if command.startswith('end-rental'):
             print_system_notification('end-rental')
             if car_id in self.rentals_in_progress:
-                self.send_bytes_to_client('End-rental success')
                 self.rentals_in_progress.remove(car_id)
+                self.send_bytes_to_client('End-rental success')
             else:
                 self.send_bytes_to_client('End-rental error not-found')
             # Exercise 3
