@@ -131,7 +131,6 @@ class Server:
 
         if command_id == 'response-end-rental':
             print_system_notification('response-end-rental')
-            print_system_notification("HERE")
             # Eg (received): <car_uuid> response-end-rental success IS21KSM
             rental_status = toks[2]
             car_number = toks[3]

@@ -110,7 +110,7 @@ class Client:
             if command_key in ["fuel", "latitude", "longitude", "doors", "lights"]:
                 self.send_bytes_to_server(f'car-info {command_key} ' + self.car_info[command_key])
             else:
-                self.send_bytes_to_server('Invalid key')
+                self.send_bytes_to_server('Invalid car info key')
 
         if command_id == 'car-end-rental':
             print_system_notification('car-end-rental')

@@ -75,10 +75,10 @@ class Client:
     def register_client(self):
         print_system_notification("[dbg] register_client")
         # Exercise 2
-        if self.userId != "" and self.userAge != "" and self.userDriverLicense != "" and self.userEmail != "" and self.userPhone != "":
+        if self.isFilled:
             self.send_bytes_to_server("register-client " + self.phone_id)
         else:
-            print_system_notification("All registration fields must be filled first")
+            print_system_notification("All fields must be filled")
 
     def register_user(self):
         popup = tk.Toplevel()
