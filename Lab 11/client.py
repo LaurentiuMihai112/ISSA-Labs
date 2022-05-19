@@ -19,7 +19,8 @@ class Package:
 def is_ordered(package_list):
     if len(package_list) != 3:
         return False
-    return package_list[0].message_id == 1 and package_list[1].message_id == 2 and package_list[2].message_id == 3
+    return True
+    # return package_list[0].message_id == 1 and package_list[1].message_id == 2 and package_list[2].message_id == 3
 
 
 def show(item_list):
@@ -48,11 +49,11 @@ def main():
             packages[sequence_counter] = [package]
         package_list = packages[sequence_counter]
         if is_ordered(package_list):
+            if len(synchronized_packages) == 3:
+                synchronized_packages = synchronized_packages[-2:]
             synchronized_packages.append(package_list)
-        if len(synchronized_packages) == 4:
-            synchronized_packages = synchronized_packages[-3:]
-        print(f"Synchronized packages : ")
-        show(synchronized_packages)
+            print(f"Synchronized packages : ")
+            show(synchronized_packages)
 
 
 if __name__ == '__main__':
